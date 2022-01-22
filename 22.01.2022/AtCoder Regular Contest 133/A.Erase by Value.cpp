@@ -13,7 +13,30 @@ void FAST_IO(){
 
 
 void solve(int cTc){
-   
+    int n;
+    cin>>n;
+
+    vector<int> v,cnt(n);
+
+    for(int i=0;i<n;++i){
+        cin>>cnt[i];
+        if(v.empty() || v.back()!=cnt[i]){
+            v.push_back(cnt[i]);
+        }
+    }
+
+    int val = v[0];
+    for(int i=1;i<v.size();++i){
+        if(v[i] < v[i-1]){
+            break;
+        }else val = v[i];
+    }
+
+    for(int i=0;i<n;++i){
+        if(cnt[i]==val) continue;
+        cout<< cnt[i] <<" ";
+    }
+
 }
 
 int main(){
