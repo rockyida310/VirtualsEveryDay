@@ -15,28 +15,47 @@ int main(){
 
     int n;
     cin>>n;
-    vector<int> v(n);
-    int sum = 0;
+    vector<int> p(n+1),q(n+1);
+    for(int i=1;i<=n;++i) cin>>p[i];
+    for(int i=1;i<=n;++i) cin>>q[i];
 
-    for(int i=0;i<n;++i){
-        cin>>v[i];
-        sum += v[i];
+    vector<vector<int>> multiples(n+1);
+    for(int i=1;i<=n;++i){
+        for(int j=i;j<=n;j+=i){
+            multiples[i].push_back(j);
+        }
     }
 
-    sum /= n;
-    int ans1 = 0,ans2=0;
-
-    for(int i=0;i<n;++i){
-        ans1 += (v[i]-sum)*(v[i]-sum);
+    vector<int> invq(n+1);
+    for(int i=1;i<=n;++i){
+        invq[q[i]] = i;
     }
 
-    ++sum;
+    vector<vector<int>> a(n+1);
 
-    for(int i=0;i<n;++i){
-        ans2 += (v[i]-sum)*(v[i]-sum);
+    for(int i=1;i<=n;++i){
+        for(int j:multiples[p[i]]){
+            a[i].emplace_back(invq[j]);
+        }
+        sort(rbegin(a[i]),rend(a[i]));
     }
 
-    cout<<min(ans1,ans2);
+    vector<int> b;
+    for(int i=1;i<=n;++i){
+        for(int j:a[i]){
+            b.push_back(j);
+        }
+    }
+
+    //now finding longest increasing subsequence
+    vector<int> res;
+    for(int x:b){
+        auto it = lower_bound(begin(res),end(res),x);
+        if(it == res.end()) res.push_back(x);
+        else *it = x;
+    }
+
+    cout<< res.size() <<"\n";
 
     return 0;
 }
